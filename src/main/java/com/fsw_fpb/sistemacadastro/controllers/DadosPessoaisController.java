@@ -28,12 +28,12 @@ public class DadosPessoaisController {
     }
 
     @GetMapping("/cpf/{cpf}")
-    public ResponseEntity<DadosPessoaisDTO> findByCpf(@PathVariable String cpf){
+    public ResponseEntity<DadosPessoaisDTO> findByCpf(@PathVariable String cpf) {
         return ResponseEntity.ok(service.findByCpf(cpf));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<DadosPessoaisDTO> findById(@PathVariable Long id){
+    public ResponseEntity<DadosPessoaisDTO> findById(@PathVariable Long id) {
         return ResponseEntity.ok(service.findById(id));
     }
 
@@ -52,4 +52,15 @@ public class DadosPessoaisController {
         }
     }
 
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<DadosPessoaisDTO> update(@PathVariable Long id, @Valid @RequestBody DadosPessoaisDTO dto) {
+        dto = service.update(id, dto);
+        return ResponseEntity.ok(dto);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        service.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }
