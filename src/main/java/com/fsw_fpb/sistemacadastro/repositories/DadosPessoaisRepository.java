@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface DadosPessoaisRepository extends JpaRepository<DadosPessoais, Long> {
     Optional<DadosPessoais> findByCpf(String cpf);
+    Boolean existsByCpf(String cpf);
 }
