@@ -2,7 +2,9 @@ package com.fsw_fpb.sistemacadastro.dto;
 
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 
@@ -20,7 +22,7 @@ public class DadosPessoaisDTO {
     @Size(min = 5, message = "CEP precisa ter no mínimo 5 caracteres")
     @NotBlank(message = "Campo requerido")
     private String cep;
-    @NotBlank(message = "Campo requerido")
+    @NotNull(message = "Campo requerido")
     private LocalDate data_nascimento;
     @NotBlank(message = "Campo requerido -> Retorne 'ATIVO' ou 'INATIVO'")
     private String status;
