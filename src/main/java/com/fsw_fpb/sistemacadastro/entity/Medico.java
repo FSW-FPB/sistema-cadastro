@@ -1,19 +1,29 @@
 package com.fsw_fpb.sistemacadastro.entity;
 
+import jakarta.persistence.*;
+
+import java.util.Objects;
+
+@Entity
+@Table(name = "tb_medico", uniqueConstraints = { @UniqueConstraint(columnNames = "id_dados_pessoais") })
 public class Medico {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cpf;
     private String crm;
+    @Column(columnDefinition = "TEXT")
     private String especialidade;
     private String email;
     private String senha;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_dados_pessoais", referencedColumnName = "id")
     private DadosPessoais dadosPessoais;
+
     public Medico() {
     }
 
-    public Medico(Long id, String cpf, String crm, String especialidade, String email, String senha, DadosPessoais dadosPessoais) {
+    public Medico(Long id, String crm, String especialidade, String email, String senha, DadosPessoais dadosPessoais) {
         this.id = id;
-        this.cpf = cpf;
         this.crm = crm;
         this.especialidade = especialidade;
         this.email = email;
@@ -21,28 +31,12 @@ public class Medico {
         this.dadosPessoais = dadosPessoais;
     }
 
-    public Medico(Long id, String cpf, String crm, String especialidade, String email, String senha) {
-        this.id = id;
-        this.cpf = cpf;
-        this.crm = crm;
-        this.especialidade = especialidade;
-        this.email = email;
-        this.senha = senha;
-    }
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String crm) {
-        this.cpf = cpf;
     }
 
     public String getCrm() {
@@ -83,5 +77,19 @@ public class Medico {
 
     public void setDadosPessoais(DadosPessoais dadosPessoais) {
         this.dadosPessoais = dadosPessoais;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Medico medico = (Medico) o;
+        return Objects.equals(getId(), medico.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }

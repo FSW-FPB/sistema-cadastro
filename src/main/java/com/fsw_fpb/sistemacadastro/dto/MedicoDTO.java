@@ -5,22 +5,22 @@ import com.fsw_fpb.sistemacadastro.entity.Medico;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class MedicoDTO {
     private Long id;
-    private String cpf;
     private String crm;
     private String especialidade;
     @Email(message = "Este é um campo de email!!")
     @NotBlank(message = "Não deixe EMAIL vazio.")
     private String email;
+    @Size(min = 5, message = "Mínimo de 5 caracteres")
     @NotNull(message = "Campo SENHA precisa ser preenchido com algo")
     private String senha;
     private DadosPessoaisDTO dadosPessoais;
 
-    public MedicoDTO(Long id, String cpf, String crm, String especialidade, String email, String senha, DadosPessoaisDTO dadosPessoais) {
+    public MedicoDTO(Long id, String crm, String especialidade, String email, String senha, DadosPessoaisDTO dadosPessoais) {
         this.id = id;
-        this.cpf = cpf;
         this.crm = crm;
         this.especialidade = especialidade;
         this.email = email;
@@ -30,7 +30,6 @@ public class MedicoDTO {
 
     public MedicoDTO(Medico entity){
         id = entity.getId();
-        cpf = entity.getCpf();
         crm = entity.getCrm();
         especialidade = entity.getEspecialidade();
         email = entity.getEmail();
@@ -40,8 +39,6 @@ public class MedicoDTO {
     //Getters
 
     public Long getId() { return id; }
-
-    public String getCpf() { return cpf; }
 
     public String getCrm() { return crm; }
 

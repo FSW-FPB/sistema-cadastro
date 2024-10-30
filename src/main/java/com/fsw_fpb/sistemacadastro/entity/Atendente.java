@@ -1,19 +1,29 @@
 package com.fsw_fpb.sistemacadastro.entity;
 
+import jakarta.persistence.*;
+
+import java.util.Objects;
+
+@Entity
+@Table(name = "tb_atendente", uniqueConstraints = { @UniqueConstraint(columnNames = "id_dados_pessoais") })
 public class Atendente {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String cpf;
     private String email;
     private String senha;
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_dados_pessoais", referencedColumnName = "id")
+    private DadosPessoais dadosPessoais;
 
     public Atendente() {
     }
 
-    public Atendente(Long id, String cpf, String email, String senha) {
+    public Atendente(Long id, String email, String senha, DadosPessoais dadosPessoais) {
         this.id = id;
-        this.cpf = cpf;
         this.email = email;
         this.senha = senha;
+        this.dadosPessoais = dadosPessoais;
     }
 
     public Long getId() {
@@ -22,14 +32,6 @@ public class Atendente {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String crm) {
-        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -46,5 +48,23 @@ public class Atendente {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public DadosPessoais getDadosPessoais() { return dadosPessoais; }
+
+    public void setDadosPessoais(DadosPessoais dadosPessoais) { this.dadosPessoais = dadosPessoais; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Atendente atendente = (Atendente) o;
+        return Objects.equals(getId(), atendente.getId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(getId());
     }
 }
