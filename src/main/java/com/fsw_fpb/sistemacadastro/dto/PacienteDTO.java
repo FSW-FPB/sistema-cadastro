@@ -4,6 +4,7 @@ import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public class PacienteDTO {
     private Long id;
@@ -13,7 +14,8 @@ public class PacienteDTO {
     @Email(message = "Este é um campo de email!!")
     @NotBlank(message = "Não deixe EMAIL vazio.")
     private String email;
-    @NotNull(message = "Campo SENHA precisa ser preenchido com algo")
+    @NotNull(message = "Senha é um campo requerido e obrigatório")
+    @Size(min = 5, message = "Mínimo de 5 caracteres")
     private String senha;
     private DadosPessoaisDTO dadosPessoais;
 

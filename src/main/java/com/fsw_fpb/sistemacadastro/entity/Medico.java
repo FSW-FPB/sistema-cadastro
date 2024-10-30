@@ -5,29 +5,27 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "tb_paciente", uniqueConstraints = { @UniqueConstraint(columnNames = "id_dados_pessoais") })
-public class Paciente {
+@Table(name = "tb_medico", uniqueConstraints = { @UniqueConstraint(columnNames = "id_dados_pessoais") })
+public class Medico {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String tipoSanguineo;
-    private String alergia;
+    private String crm;
     @Column(columnDefinition = "TEXT")
-    private String doencasCronicas;
+    private String especialidade;
     private String email;
     private String senha;
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_dados_pessoais", referencedColumnName = "id")
     private DadosPessoais dadosPessoais;
 
-    public Paciente() {
+    public Medico() {
     }
 
-    public Paciente(Long id, String tipoSanguineo, String alergia, String doencasCronicas, String email, String senha, DadosPessoais dadosPessoais) {
+    public Medico(Long id, String crm, String especialidade, String email, String senha, DadosPessoais dadosPessoais) {
         this.id = id;
-        this.tipoSanguineo = tipoSanguineo;
-        this.alergia = alergia;
-        this.doencasCronicas = doencasCronicas;
+        this.crm = crm;
+        this.especialidade = especialidade;
         this.email = email;
         this.senha = senha;
         this.dadosPessoais = dadosPessoais;
@@ -41,28 +39,20 @@ public class Paciente {
         this.id = id;
     }
 
-    public String getTipoSanguineo() {
-        return tipoSanguineo;
+    public String getCrm() {
+        return crm;
     }
 
-    public void setTipoSanguineo(String tipoSanguineo) {
-        this.tipoSanguineo = tipoSanguineo;
+    public void setCrm(String crm) {
+        this.crm = crm;
     }
 
-    public String getAlergia() {
-        return alergia;
+    public String getEspecialidade() {
+        return especialidade;
     }
 
-    public void setAlergia(String alergia) {
-        this.alergia = alergia;
-    }
-
-    public String getDoencasCronicas() {
-        return doencasCronicas;
-    }
-
-    public void setDoencasCronicas(String doencasCronicas) {
-        this.doencasCronicas = doencasCronicas;
+    public void setEspecialidade(String especialidade) {
+        this.especialidade = especialidade;
     }
 
     public String getEmail() {
@@ -94,8 +84,8 @@ public class Paciente {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Paciente paciente = (Paciente) o;
-        return Objects.equals(getId(), paciente.getId());
+        Medico medico = (Medico) o;
+        return Objects.equals(getId(), medico.getId());
     }
 
     @Override
