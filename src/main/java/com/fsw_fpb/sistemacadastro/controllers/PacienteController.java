@@ -1,6 +1,7 @@
 package com.fsw_fpb.sistemacadastro.controllers;
 
 import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
 import com.fsw_fpb.sistemacadastro.services.PacienteService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -44,6 +45,12 @@ public class PacienteController {
     @PutMapping("/{id}")
     public ResponseEntity<PacienteDTO> update(@PathVariable Long id, @RequestBody @Valid PacienteDTO dto){
         return ResponseEntity.ok(service.update(id, dto));
+    }
+
+    @PatchMapping("/updateEmailOrPassword/{id}")
+    public ResponseEntity<PacienteDTO> updateEmailOrPassword(@PathVariable Long id, @RequestBody UpdateEmailPasswordDTO dto) {
+        PacienteDTO updatedPaciente = service.updateEmailOrPassword(id, dto);
+        return ResponseEntity.ok(updatedPaciente);
     }
 
     @DeleteMapping("/{id}")

@@ -1,7 +1,10 @@
 package com.fsw_fpb.sistemacadastro.services;
 
+import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
 import com.fsw_fpb.sistemacadastro.dto.MedicoDTO;
 import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.entity.Atendente;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.entity.Medico;
 import com.fsw_fpb.sistemacadastro.entity.Paciente;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,9 +25,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class MedicoService {
     @Autowired
     private MedicoRepository repository;
-
     @Autowired
     private DadosPessoaisRepository dadosPessoaisRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional(readOnly = true)
     public Page<MedicoDTO> findAll(Pageable pageable){
@@ -50,6 +55,7 @@ public class MedicoService {
         Medico entity = new Medico();
         copyDtoToEntity(dto, entity);
         entity.setDadosPessoais(dadosPessoais);
+        entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
 
         entity = repository.save(entity);
         return new MedicoDTO(entity);
@@ -60,6 +66,11 @@ public class MedicoService {
         try {
             Medico entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
+
+            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+            }
+
             entity = repository.save(entity);
             return new MedicoDTO(entity);
         } catch (EntityNotFoundException e){
@@ -79,10 +90,28 @@ public class MedicoService {
         }
     }
 
+    @Transactional
+    public MedicoDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+        try {
+            Medico entity = repository.getReferenceById(id);
+
+            if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+                entity.setEmail(dto.getEmail());
+            }
+            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+            }
+
+            entity = repository.save(entity);
+            return new MedicoDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não foi encontrado!");
+        }
+    }
+
     private void copyDtoToEntity(MedicoDTO dto, Medico entity){
         entity.setCrm(dto.getCrm());
         entity.setEspecialidade(dto.getEspecialidade());
         entity.setEmail(dto.getEmail());
-        entity.setSenha(dto.getSenha());
     }
 }
