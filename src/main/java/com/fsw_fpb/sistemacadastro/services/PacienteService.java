@@ -1,6 +1,7 @@
 package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import com.fsw_fpb.sistemacadastro.repositories.DadosPessoaisRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +25,9 @@ public class PacienteService {
 
     @Autowired
     private DadosPessoaisRepository dadosPessoaisRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional (readOnly = true)
     public Page<PacienteDTO> findAll(Pageable pageable){
@@ -49,6 +54,7 @@ public class PacienteService {
         Paciente entity = new Paciente();
         copyDtoToEntity(dto, entity);
         entity.setDadosPessoais(dadosPessoais);
+        entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
 
         entity = repository.save(entity);
         return new PacienteDTO(entity);
@@ -77,6 +83,27 @@ public class PacienteService {
             throw new DatabaseException("Falha de integridade referencial!");
         }
     }
+
+    @Transactional
+    public PacienteDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+        try {
+            Paciente entity = repository.getReferenceById(id);
+
+            if (dto.getEmail() != null) {
+                entity.setEmail(dto.getEmail());
+            }
+
+            if (dto.getSenha() != null) {
+                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+            }
+
+            entity = repository.save(entity);
+            return new PacienteDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não foi encontrado!");
+        }
+    }
+
 
     private void copyDtoToEntity(PacienteDTO pacienteDTO, Paciente paciente){
         paciente.setTipoSanguineo(pacienteDTO.getTipoSanguineo());

@@ -1,6 +1,7 @@
 package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
 import com.fsw_fpb.sistemacadastro.entity.Atendente;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.repositories.AtendenteRepository;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,9 +21,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class AtendenteService {
     @Autowired
     private AtendenteRepository repository;
-
     @Autowired
     private DadosPessoaisRepository dadosPessoaisRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional(readOnly = true)
     public Page<AtendenteDTO> findAll(Pageable pageable){
@@ -48,6 +51,7 @@ public class AtendenteService {
         Atendente entity = new Atendente();
         copyDtoToEntity(dto, entity);
         entity.setDadosPessoais(dadosPessoais);
+        entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
 
         entity = repository.save(entity);
         return new AtendenteDTO(entity);
@@ -58,6 +62,11 @@ public class AtendenteService {
         try{
             Atendente entity = repository.getReferenceById(id);
             copyDtoToEntity(dto, entity);
+
+            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+            }
+
             entity = repository.save(entity);
             return new AtendenteDTO(entity);
         } catch (EntityNotFoundException e){
@@ -77,8 +86,28 @@ public class AtendenteService {
         }
     }
 
+    @Transactional
+    public AtendenteDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+        try {
+            Atendente entity = repository.getReferenceById(id);
+
+            // Atualiza apenas os campos que foram fornecidos
+            if (dto.getEmail() != null && !dto.getEmail().isEmpty()) {
+                entity.setEmail(dto.getEmail());
+            }
+            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
+                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
+            }
+
+            entity = repository.save(entity);
+            return new AtendenteDTO(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException("Recurso não foi encontrado!");
+        }
+    }
+
+
     private void copyDtoToEntity(AtendenteDTO dto, Atendente entity){
         entity.setEmail(dto.getEmail());
-        entity.setSenha(dto.getSenha());
     }
 }
