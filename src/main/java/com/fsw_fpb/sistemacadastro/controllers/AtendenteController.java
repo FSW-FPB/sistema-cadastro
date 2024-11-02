@@ -1,6 +1,7 @@
 package com.fsw_fpb.sistemacadastro.controllers;
 
 import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
 import com.fsw_fpb.sistemacadastro.services.AtendenteService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,14 @@ public class AtendenteController {
     @PutMapping("/{id}")
     public ResponseEntity<AtendenteDTO> update(@PathVariable Long id, @RequestBody @Valid AtendenteDTO dto){
         return ResponseEntity.ok(service.update(id, dto));
+    }
+
+    @PatchMapping("/updateEmailOrPassword/{id}")
+    public ResponseEntity<AtendenteDTO> updateEmailOrPassword(
+            @PathVariable Long id,
+            @RequestBody @Valid UpdateEmailPasswordDTO dto) {
+        AtendenteDTO updatedDto = service.updateEmailOrPassword(id, dto);
+        return ResponseEntity.ok(updatedDto);
     }
 
     @DeleteMapping("/{id}")
