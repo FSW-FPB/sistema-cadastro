@@ -2,6 +2,7 @@ package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
 import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdatePacienteDTO;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import com.fsw_fpb.sistemacadastro.repositories.DadosPessoaisRepository;
@@ -61,10 +62,20 @@ public class PacienteService {
     }
 
     @Transactional
-    public PacienteDTO update(Long id, PacienteDTO dto){
+    public PacienteDTO update(Long id, UpdatePacienteDTO dto){
         try{
             Paciente entity = repository.getReferenceById(id);
-            copyDtoToEntity(dto, entity);
+
+            if (dto.getAlergia() != null){
+                entity.setAlergia(dto.getAlergia());
+            }
+            if (dto.getDoencasCronicas() != null){
+                entity.setDoencasCronicas(dto.getDoencasCronicas());
+            }
+            if (dto.getTipoSanguineo() != null){
+                entity.setTipoSanguineo(dto.getTipoSanguineo());
+            }
+
             entity = repository.save(entity);
             return new PacienteDTO(entity);
         } catch (EntityNotFoundException e){

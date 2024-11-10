@@ -58,23 +58,6 @@ public class AtendenteService {
     }
 
     @Transactional
-    public AtendenteDTO update(Long id, AtendenteDTO dto){
-        try{
-            Atendente entity = repository.getReferenceById(id);
-            copyDtoToEntity(dto, entity);
-
-            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
-                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
-            }
-
-            entity = repository.save(entity);
-            return new AtendenteDTO(entity);
-        } catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException("Recurso não foi encontrado!");
-        }
-    }
-
-    @Transactional
     public void delete(Long id){
         if(!repository.existsById(id)){
             throw new ResourceNotFoundException("Recurso não encontrado!");
