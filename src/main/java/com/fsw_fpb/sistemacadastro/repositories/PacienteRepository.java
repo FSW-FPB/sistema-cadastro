@@ -3,5 +3,8 @@ package com.fsw_fpb.sistemacadastro.repositories;
 import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
+    Optional<Paciente> findByEmail(String email);
 }

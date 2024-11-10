@@ -1,7 +1,7 @@
 package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
-import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.LoginDTO;
 import com.fsw_fpb.sistemacadastro.entity.Atendente;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.repositories.AtendenteRepository;
@@ -70,7 +70,7 @@ public class AtendenteService {
     }
 
     @Transactional
-    public AtendenteDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+    public AtendenteDTO updateEmailOrPassword(Long id, LoginDTO dto) {
         try {
             Atendente entity = repository.getReferenceById(id);
 

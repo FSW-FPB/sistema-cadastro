@@ -1,12 +1,16 @@
 package com.fsw_fpb.sistemacadastro.controllers;
 
 import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
-import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.LoginDTO;
+import com.fsw_fpb.sistemacadastro.dto.LoginResponseDTO;
 import com.fsw_fpb.sistemacadastro.services.AtendenteService;
+import com.fsw_fpb.sistemacadastro.services.AuthService;
+import com.fsw_fpb.sistemacadastro.services.exception.AuthException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,9 @@ import java.net.URISyntaxException;
 public class AtendenteController {
     @Autowired
     private AtendenteService service;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping
     public ResponseEntity<Page<AtendenteDTO>> findAll(Pageable pageable){
@@ -45,9 +52,20 @@ public class AtendenteController {
     @PatchMapping("/updateEmailOrPassword/{id}")
     public ResponseEntity<AtendenteDTO> updateEmailOrPassword(
             @PathVariable Long id,
-            @RequestBody @Valid UpdateEmailPasswordDTO dto) {
+            @RequestBody @Valid LoginDTO dto) {
         AtendenteDTO updatedDto = service.updateEmailOrPassword(id, dto);
         return ResponseEntity.ok(updatedDto);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> loginAtendente(@RequestBody LoginDTO loginDTO) {
+        try {
+            LoginResponseDTO response = authService.authenticateAtendente(loginDTO).getBody();
+            return ResponseEntity.ok(response);
+        } catch (AuthException e) {
+            LoginResponseDTO errorResponse = new LoginResponseDTO(null, null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+        }
     }
 
     @DeleteMapping("/{id}")

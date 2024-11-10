@@ -3,7 +3,7 @@ package com.fsw_fpb.sistemacadastro.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
-public class UpdateEmailPasswordDTO {
+public class LoginDTO {
     @Email(message = "Este é um campo de email válido!")
     private String email;
 
