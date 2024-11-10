@@ -1,7 +1,7 @@
 package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
-import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.LoginDTO;
 import com.fsw_fpb.sistemacadastro.entity.Atendente;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.repositories.AtendenteRepository;
@@ -58,23 +58,6 @@ public class AtendenteService {
     }
 
     @Transactional
-    public AtendenteDTO update(Long id, AtendenteDTO dto){
-        try{
-            Atendente entity = repository.getReferenceById(id);
-            copyDtoToEntity(dto, entity);
-
-            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
-                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
-            }
-
-            entity = repository.save(entity);
-            return new AtendenteDTO(entity);
-        } catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException("Recurso não foi encontrado!");
-        }
-    }
-
-    @Transactional
     public void delete(Long id){
         if(!repository.existsById(id)){
             throw new ResourceNotFoundException("Recurso não encontrado!");
@@ -87,7 +70,7 @@ public class AtendenteService {
     }
 
     @Transactional
-    public AtendenteDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+    public AtendenteDTO updateEmailOrPassword(Long id, LoginDTO dto) {
         try {
             Atendente entity = repository.getReferenceById(id);
 

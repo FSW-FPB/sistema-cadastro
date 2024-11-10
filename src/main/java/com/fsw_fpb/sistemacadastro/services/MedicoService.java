@@ -1,13 +1,8 @@
 package com.fsw_fpb.sistemacadastro.services;
 
-import com.fsw_fpb.sistemacadastro.dto.AtendenteDTO;
-import com.fsw_fpb.sistemacadastro.dto.MedicoDTO;
-import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
-import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
-import com.fsw_fpb.sistemacadastro.entity.Atendente;
+import com.fsw_fpb.sistemacadastro.dto.*;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.entity.Medico;
-import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import com.fsw_fpb.sistemacadastro.repositories.DadosPessoaisRepository;
 import com.fsw_fpb.sistemacadastro.repositories.MedicoRepository;
 import com.fsw_fpb.sistemacadastro.services.exception.DatabaseException;
@@ -62,20 +57,18 @@ public class MedicoService {
     }
 
     @Transactional
-    public MedicoDTO update(Long id, MedicoDTO dto){
-        try {
-            Medico entity = repository.getReferenceById(id);
-            copyDtoToEntity(dto, entity);
+    public MedicoDTO update(Long id, UpdateMedicoDTO dto) {
+        Medico entity = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Médico não encontrado com ID: " + id));
 
-            if (dto.getSenha() != null && !dto.getSenha().isEmpty()) {
-                entity.setSenha(bCryptPasswordEncoder.encode(dto.getSenha()));
-            }
-
-            entity = repository.save(entity);
-            return new MedicoDTO(entity);
-        } catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException("Recurso não foi encontrado!");
+        if (dto.getCrm() != null) {
+            entity.setCrm(dto.getCrm());
         }
+        if (dto.getEspecialidade() != null) {
+            entity.setEspecialidade(dto.getEspecialidade());
+        }
+        entity = repository.save(entity);
+        return new MedicoDTO(entity);
     }
 
     @Transactional
@@ -91,7 +84,7 @@ public class MedicoService {
     }
 
     @Transactional
-    public MedicoDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+    public MedicoDTO updateEmailOrPassword(Long id, LoginDTO dto) {
         try {
             Medico entity = repository.getReferenceById(id);
 
