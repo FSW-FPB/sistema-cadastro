@@ -1,13 +1,17 @@
 package com.fsw_fpb.sistemacadastro.controllers;
 
+import com.fsw_fpb.sistemacadastro.dto.LoginResponseDTO;
 import com.fsw_fpb.sistemacadastro.dto.PacienteDTO;
-import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.LoginDTO;
 import com.fsw_fpb.sistemacadastro.dto.UpdatePacienteDTO;
+import com.fsw_fpb.sistemacadastro.services.AuthService;
 import com.fsw_fpb.sistemacadastro.services.PacienteService;
+import com.fsw_fpb.sistemacadastro.services.exception.AuthException;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +23,9 @@ import java.net.URISyntaxException;
 public class PacienteController {
     @Autowired
     private PacienteService service;
+
+    @Autowired
+    private AuthService authService;
 
     @GetMapping
     public ResponseEntity<Page<PacienteDTO>> findAll(Pageable pageable){
@@ -49,10 +56,22 @@ public class PacienteController {
     }
 
     @PatchMapping("/updateEmailOrPassword/{id}")
-    public ResponseEntity<PacienteDTO> updateEmailOrPassword(@PathVariable Long id, @RequestBody UpdateEmailPasswordDTO dto) {
+    public ResponseEntity<PacienteDTO> updateEmailOrPassword(@PathVariable Long id, @RequestBody LoginDTO dto) {
         PacienteDTO updatedPaciente = service.updateEmailOrPassword(id, dto);
         return ResponseEntity.ok(updatedPaciente);
     }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDTO> loginPaciente(@RequestBody LoginDTO loginDTO) {
+        try {
+            LoginResponseDTO response = authService.authenticatePaciente(loginDTO).getBody();
+            return ResponseEntity.ok(response);
+        } catch (AuthException e) {
+            LoginResponseDTO errorResponse = new LoginResponseDTO(null, null);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+        }
+    }
+
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id){

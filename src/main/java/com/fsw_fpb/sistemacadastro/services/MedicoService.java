@@ -1,10 +1,8 @@
 package com.fsw_fpb.sistemacadastro.services;
 
 import com.fsw_fpb.sistemacadastro.dto.*;
-import com.fsw_fpb.sistemacadastro.entity.Atendente;
 import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import com.fsw_fpb.sistemacadastro.entity.Medico;
-import com.fsw_fpb.sistemacadastro.entity.Paciente;
 import com.fsw_fpb.sistemacadastro.repositories.DadosPessoaisRepository;
 import com.fsw_fpb.sistemacadastro.repositories.MedicoRepository;
 import com.fsw_fpb.sistemacadastro.services.exception.DatabaseException;
@@ -86,7 +84,7 @@ public class MedicoService {
     }
 
     @Transactional
-    public MedicoDTO updateEmailOrPassword(Long id, UpdateEmailPasswordDTO dto) {
+    public MedicoDTO updateEmailOrPassword(Long id, LoginDTO dto) {
         try {
             Medico entity = repository.getReferenceById(id);
 
