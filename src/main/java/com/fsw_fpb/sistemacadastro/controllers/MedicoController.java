@@ -2,6 +2,7 @@ package com.fsw_fpb.sistemacadastro.controllers;
 
 import com.fsw_fpb.sistemacadastro.dto.MedicoDTO;
 import com.fsw_fpb.sistemacadastro.dto.UpdateEmailPasswordDTO;
+import com.fsw_fpb.sistemacadastro.dto.UpdateMedicoDTO;
 import com.fsw_fpb.sistemacadastro.services.MedicoService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +45,7 @@ public class MedicoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<MedicoDTO> update(@PathVariable Long id, @RequestBody @Valid MedicoDTO dto){
+    public ResponseEntity<MedicoDTO> update(@PathVariable Long id, @RequestBody @Valid UpdateMedicoDTO dto){
         return ResponseEntity.ok(service.update(id, dto));
     }
 

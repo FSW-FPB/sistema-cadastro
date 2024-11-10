@@ -42,11 +42,6 @@ public class AtendenteController {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<AtendenteDTO> update(@PathVariable Long id, @RequestBody @Valid AtendenteDTO dto){
-        return ResponseEntity.ok(service.update(id, dto));
-    }
-
     @PatchMapping("/updateEmailOrPassword/{id}")
     public ResponseEntity<AtendenteDTO> updateEmailOrPassword(
             @PathVariable Long id,
