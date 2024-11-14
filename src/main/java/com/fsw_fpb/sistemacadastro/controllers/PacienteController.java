@@ -67,7 +67,7 @@ public class PacienteController {
             LoginResponseDTO response = authService.authenticatePaciente(loginDTO).getBody();
             return ResponseEntity.ok(response);
         } catch (AuthException e) {
-            LoginResponseDTO errorResponse = new LoginResponseDTO(null, null);
+            LoginResponseDTO errorResponse = new LoginResponseDTO(null, null, null);
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
         }
     }

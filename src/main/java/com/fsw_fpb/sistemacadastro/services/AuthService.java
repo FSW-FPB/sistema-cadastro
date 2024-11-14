@@ -41,7 +41,7 @@ public class AuthService {
             throw new AuthException("Senha incorreta");
         }
         String token = jwtService.generateToken(paciente.getEmail());
-        LoginResponseDTO response = new LoginResponseDTO(token, 1);
+        LoginResponseDTO response = new LoginResponseDTO(token, 1, paciente.getId());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -53,7 +53,7 @@ public class AuthService {
             throw new AuthException("Senha incorreta");
         }
         String token = jwtService.generateToken(medico.getEmail());
-        LoginResponseDTO response = new LoginResponseDTO(token, 2);
+        LoginResponseDTO response = new LoginResponseDTO(token, 2, medico.getId());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
@@ -65,7 +65,7 @@ public class AuthService {
             throw new AuthException("Senha incorreta");
         }
         String token = jwtService.generateToken(atendente.getEmail());
-        LoginResponseDTO response = new LoginResponseDTO(token, 3);
+        LoginResponseDTO response = new LoginResponseDTO(token, 3, atendente.getId());
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 }
