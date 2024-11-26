@@ -4,7 +4,6 @@ import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 
@@ -26,8 +25,10 @@ public class DadosPessoaisDTO {
     private LocalDate data_nascimento;
     @NotBlank(message = "Campo requerido -> Retorne 'ATIVO' ou 'INATIVO'")
     private String status;
+    private String imgUrl;
+    private Character genero;
 
-    public DadosPessoaisDTO(Long id, String nome, String cpf, String telefone, String cep, LocalDate data_nascimento, String status) {
+    public DadosPessoaisDTO(Long id, String nome, String cpf, String telefone, String cep, LocalDate data_nascimento, String status, String imgUrl, Character genero) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -35,6 +36,8 @@ public class DadosPessoaisDTO {
         this.cep = cep;
         this.data_nascimento = data_nascimento;
         this.status = status;
+        this.genero = genero;
+        this.imgUrl = imgUrl;
     }
 
     public DadosPessoaisDTO(DadosPessoais entity){
@@ -45,6 +48,8 @@ public class DadosPessoaisDTO {
         cep = entity.getCep();
         data_nascimento = entity.getData_nascimento();
         status = entity.getStatus();
+        imgUrl = entity.getImgUrl();
+        genero = entity.getGenero();
     }
 
     public Long getId() {
@@ -73,5 +78,13 @@ public class DadosPessoaisDTO {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public Character getGenero() {
+        return genero;
     }
 }

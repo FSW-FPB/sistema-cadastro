@@ -88,5 +88,7 @@ public class DadosPessoaisService {
         entity.setStatus(dto.getStatus());
         entity.setData_nascimento(dto.getData_nascimento());
         entity.setTelefone(dto.getTelefone());
+        entity.setGenero(dto.getGenero());
+        entity.setImgUrl(dto.getImgUrl());
     }
 }

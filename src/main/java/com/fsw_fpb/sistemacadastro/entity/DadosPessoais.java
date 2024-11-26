@@ -17,11 +17,13 @@ public class DadosPessoais {
     private String cep;
     private LocalDate data_nascimento;
     private String status;
+    private Character genero;
+    private String imgUrl;
 
     public DadosPessoais() {
     }
 
-    public DadosPessoais(Long id, String nome, String cpf, String telefone, String cep, LocalDate data_nascimento, String status) {
+    public DadosPessoais(Long id, String nome, String cpf, String telefone, String cep, LocalDate data_nascimento, String status, String imgUrl, Character genero) {
         this.id = id;
         this.nome = nome;
         this.cpf = cpf;
@@ -29,6 +31,8 @@ public class DadosPessoais {
         this.cep = cep;
         this.data_nascimento = data_nascimento;
         this.status = status;
+        this.genero = genero;
+        this.imgUrl = imgUrl;
     }
 
     public Long getId() {
@@ -85,6 +89,22 @@ public class DadosPessoais {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Character getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Character genero) {
+        this.genero = genero;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
 
     @Override
