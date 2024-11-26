@@ -31,7 +31,7 @@ public class DadosPessoais {
         this.cep = cep;
         this.data_nascimento = data_nascimento;
         this.status = status;
-        this.genero = Character.toUpperCase(genero);
+        this.genero = genero;
         this.imgUrl = imgUrl;
     }
 
