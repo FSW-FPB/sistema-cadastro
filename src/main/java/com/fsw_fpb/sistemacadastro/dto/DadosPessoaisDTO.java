@@ -4,7 +4,6 @@ import com.fsw_fpb.sistemacadastro.entity.DadosPessoais;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.time.LocalDate;
 
@@ -37,7 +36,7 @@ public class DadosPessoaisDTO {
         this.cep = cep;
         this.data_nascimento = data_nascimento;
         this.status = status;
-        this.genero = Character.toUpperCase(genero);
+        this.genero = genero;
         this.imgUrl = imgUrl;
     }
 
