@@ -20,7 +20,7 @@ public class LoginResponseDTO {
         this.token = token;
     }
 
-    public int getTipoUsuario() {
+    public Integer getTipoUsuario() {
         return tipoUsuario;
     }
 
